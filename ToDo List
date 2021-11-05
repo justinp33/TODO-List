@@ -1,0 +1,37 @@
+const form = document.querySelector("form");
+const taskList = document.querySelector("#todo");
+
+const savedTodos = JSON.parse(localStorage.getItem("todos")) || [];
+for (let i = 0; i < savedTodos.length; i++) {
+  let newLi = document.createElement("li");
+  newLi.innerText = savedTodos[i].task;
+  taskList.appendChild(newLi);
+}
+
+form.addEventListener("submit", function(e) {
+  e.preventDefault();
+  let newLi = document.createElement("li");
+  let newTaskInput = document.querySelector("#task");
+  let btn = document.createElement("button");
+  btn.innerText = "Remove";
+  newLi.innerText = newTaskInput.value;
+  form.reset();
+  taskList.appendChild(newLi);
+  newLi.append(btn);
+
+  savedTodos.push({ task: newLi.innerText});
+  localStorage.setItem("todos", JSON.stringify(savedTodos));
+});
+
+taskList.addEventListener("click", function(e){
+    if(e.target.tagName === "BUTTON") {
+        e.target.parentElement.remove();
+    }
+    else if(e.target.tagName === "LI") {
+        console.log("You clicked an LI");
+        e.target.classList.toggle('strike');
+    }
+});
+
+
+//Still need to add function that doesn't have old tasks show up when refreshed
